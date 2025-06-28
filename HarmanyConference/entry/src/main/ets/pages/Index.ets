@@ -1,10 +1,10 @@
-import { User, UserData } from '../model/User';
+import { LoginRequest, User, UserData } from '../model/User';
 
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
 import common from '@ohos.app.ability.common';
 import { bufferToString } from '../util/BufferUtil';
-
+import { http } from '@kit.NetworkKit';
 
 
 @Entry
@@ -55,27 +55,44 @@ struct Index {
     }
     this.isLoading = true;
     this.errorMessage = '';
+
+    const requestData :LoginRequest={
+      username: this.username,
+      password: this.password,
+      companyName: this.company
+    };
+
     try {
-      const users = await this.loadUsers();
-      const foundUser = users.find(user =>
-      user.username === this.username &&
-        user.password === this.password &&
-        user.compony === this.company
+      const httpRequest = http.createHttp();
+
+      const response = await httpRequest.request(
+        'http://172.20.10.5:8080/mobileLogin',
+        {
+          method: http.RequestMethod.POST,
+          header: {
+            'Content-Type': 'application/json'
+          },
+          extraData: JSON.stringify(requestData)
+        }
       );
-      if (foundUser) {
-        // 存储登录用户信息
-        this.currentUser = foundUser;
+
+      if (response.responseCode === 200) {
+        const user = JSON.parse(response.result.toString()) as User;
+        this.currentUser = user;
         promptAction.showToast({ message: '登录成功', duration: 1000 });
-        // 延迟跳转以便显示成功提示
         setTimeout(() => {
           router.replaceUrl({ url: 'pages/MasterPage' });
         }, 1200);
+      } else if (response.responseCode === 401) {
+        this.errorMessage = '用户名、密码或公司不正确';
       } else {
-        this.errorMessage = '用户名、密码或公司信息不正确';
+        this.errorMessage = '登录失败，状态码：' + response.responseCode;
       }
+
+      httpRequest.destroy();
     } catch (error) {
       console.error('Login error:', JSON.stringify(error));
-      this.errorMessage = '登录过程中发生错误';
+      this.errorMessage = '网络错误，无法登录';
     } finally {
       this.isLoading = false;
     }
