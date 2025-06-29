@@ -62,7 +62,7 @@ export struct ConferenceItem {
             .backgroundColor('#F0F0F0')
             .borderRadius(8)
         } else {
-          NetworkImage({ url: this.course.cover_url })
+          NetworkImage({ url: this.course.coverUrl })
             .width(100)
             .height(100)
             .borderRadius(8)
