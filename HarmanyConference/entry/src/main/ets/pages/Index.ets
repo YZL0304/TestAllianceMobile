@@ -18,34 +18,6 @@ struct Index {
   @State errorMessage: string = '';
   @State showPassword: boolean = false;
 
-  // 读取用户数据
-  async loadUsers(): Promise<User[]> {
-    try {
-      const context = getContext(this) as common.UIAbilityContext;
-      // 直接获取文件内容为 Uint8Array
-      const content: Uint8Array = await context.resourceManager.getRawFileContent('users.json');
-      // 使用工具函数将 Uint8Array 转换为字符串
-      const jsonStr: string = bufferToString(content);
-      // 解析 JSON 数据（使用明确定义的类型）
-      const usersData: UserData[] = JSON.parse(jsonStr) as UserData[];
-      // 转换为 User 对象
-      return usersData.map(user =>
-      new User(
-        user.user_id,
-        user.compony,
-        user.username,
-        user.nickname,
-        user.phone,
-        user.email,
-        user.password
-      )
-      );
-    } catch (error) {
-      console.error('Error loading users:', JSON.stringify(error));
-      promptAction.showToast({ message: '加载用户数据失败', duration: 2000 });
-      return [];
-    }
-  }
 
   // 处理登录逻辑
   async handleLogin() {
@@ -61,10 +33,9 @@ struct Index {
       password: this.password,
       companyName: this.company
     };
-
+//调用后端接口检查用户是否存在
     try {
       const httpRequest = http.createHttp();
-
       const response = await httpRequest.request(
         'http://172.22.123.162:8080/mobileLogin',
         {
