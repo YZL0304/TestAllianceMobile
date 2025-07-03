@@ -77,7 +77,7 @@ export struct DynamicsDetail {
                   .width(200)
                   .height(4)
                   .color(Color.Blue);
-                Text("加载中....").margin({ top: 8 });
+                Text("加载中...").margin({ top: 8 });
               }
               .width("100%")
               .height(200)
