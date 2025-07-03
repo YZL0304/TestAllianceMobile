@@ -13,6 +13,17 @@
     "deliveryWithInstall": true,
     "installationFree": false,
     "pages": "$profile:main_pages",
+    // 添加网络权限请求
+    "requestPermissions": [
+      {
+        "name": "ohos.permission.INTERNET",
+        "usedScene": {
+          "abilities": ["EntryAbility"],
+          "when": "always"
+        }
+      }
+    ],
+
     "abilities": [
       {
         "name": "EntryAbility",
