@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>公益行动 - 助力乡村教育发展</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<style>
+		* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 Q50,10 100,0 L100,100 Q50,90 0,100 Z" fill="rgba(255, 126, 95, 0.05)"/></svg>');
+            background-size: cover;
+            z-index: 0;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            color: #e74c3c;
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .tagline {
+            color: #ff7e5f;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            min-width: 300px;
+            transition: all 0.4s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .main-card {
+            flex: 2;
+            background: linear-gradient(to bottom right, #ffffff, #fff5f0);
+        }
+
+        h2 {
+            color: #e74c3c;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #ff7e5f;
+            display: flex;
+            align-items: center;
+            font-size: 2rem;
+        }
+
+        h2 i {
+            margin-right: 15px;
+            color: #ff7e5f;
+        }
+
+        p {
+            margin-bottom: 25px;
+            font-size: 1.2rem;
+            color: #444;
+            line-height: 1.8;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #ff7e5f30, #feb47b30);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 5px solid #e74c3c;
+        }
+
+        .highlight p {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: #e74c3c;
+            margin: 0;
+            text-align: center;
+        }
+
+        .activities {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .activity-item {
+            background: #fff5f0;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            text-align: center;
+            border-top: 4px solid #e74c3c;
+        }
+
+        .activity-item:hover {
+            background: #ffece4;
+            transform: scale(1.03);
+        }
+
+        .activity-item i {
+            font-size: 3rem;
+            color: #e74c3c;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .activity-item h3 {
+            color: #e74c3c;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 35px 0;
+        }
+
+        .gallery-item {
+            height: 220px;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .gallery-item .image-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .gallery-item .caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(231, 76, 60, 0.85);
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin: 35px 0;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #e74c3c 0%, #ff7e5f 100%);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 10px 25px rgba(231, 76, 60, 0.4);
+        }
+
+        .stat-box .number {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .stat-box p {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin: 0;
+            color: white;
+        }
+
+        .testimonials {
+            background: #fff5f0;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .testimonial {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .testimonial i {
+            font-size: 2.5rem;
+            color: #e74c3c;
+            margin-bottom: 20px;
+        }
+
+        .testimonial p {
+            font-style: italic;
+            font-size: 1.3rem;
+            line-height: 1.8;
+            position: relative;
+        }
+
+        .testimonial p::before,
+        .testimonial p::after {
+            content: '"';
+            font-size: 3rem;
+            color: #ff7e5f;
+            position: absolute;
+        }
+
+        .testimonial p::before {
+            top: -20px;
+            left: -30px;
+        }
+
+        .testimonial p::after {
+            bottom: -40px;
+            right: -30px;
+        }
+
+        .testimonial .author {
+            font-weight: 600;
+            color: #e74c3c;
+            font-size: 1.2rem;
+            margin-top: 30px;
+        }
+
+        .cta {
+            text-align: center;
+            padding: 50px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            margin-top: 40px;
+        }
+
+        .cta h2 {
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(to right, #e74c3c, #ff7e5f);
+            color: white;
+            padding: 18px 45px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-top: 25px;
+            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(231, 76, 60, 0.7);
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            margin-top: 40px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+        }
+
+        .footer-logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+            display: block;
+            margin-top: 15px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 900px) {
+            .main-content {
+                flex-direction: column;
+            }
+
+            h1 {
+                font-size: 2.3rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 25px 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .tagline {
+                font-size: 1.2rem;
+            }
+
+            .card {
+                padding: 25px;
+            }
+
+            .cta {
+                padding: 30px 20px;
+            }
+
+            .stat-box .number {
+                font-size: 2.8rem;
+            }
+
+            .testimonials {
+                padding: 25px 20px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            h2 {
+                font-size: 1.6rem;
+            }
+
+            .tagline {
+                font-size: 1.1rem;
+            }
+
+            .activities, .gallery, .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .testimonial p {
+                font-size: 1.1rem;
+            }
+        }
+	</style>
+</head>
+<body>
+<div class="container">
+	<header>
+		<div class="header-overlay"></div>
+		<div class="header-content">
+			<h1><i class="fas fa-hands-helping"></i> 公益行动</h1>
+			<p class="tagline">用科技温暖童心，助力乡村教育发展</p>
+			<p>会员单位积极参与欠发达地区留守儿童公益活动，捐赠学习物资，开展科技教育普及，助力乡村教育发展。</p>
+		</div>
+	</header>
+
+	<div class="main-content">
+		<div class="card main-card">
+			<h2><i class="fas fa-heart"></i> 公益使命</h2>
+			<p>我们相信，每个孩子都应该有平等接受教育的机会。通过科技的力量，我们致力于为欠发达地区的留守儿童提供更好的学习资源和教育机会，帮助他们开拓视野，实现梦想。</p>
+
+			<div class="highlight">
+				<p>"会员单位积极参与欠发达地区留守儿童公益活动，捐赠学习物资，开展科技教育普及，助力乡村教育发展。"</p>
+			</div>
+
+			<h2><i class="fas fa-hands"></i> 主要公益活动</h2>
+
+			<div class="activities">
+				<div class="activity-item">
+					<i class="fas fa-book"></i>
+					<h3>学习物资捐赠</h3>
+					<p>为乡村学校捐赠图书、文具、电脑等学习用品，改善学习条件</p>
+				</div>
+				<div class="activity-item">
+					<i class="fas fa-laptop"></i>
+					<h3>科技教育普及</h3>
+					<p>开展编程、人工智能等科技课程，培养孩子们的科技兴趣</p>
+				</div>
+				<div class="activity-item">
+					<i class="fas fa-school"></i>
+					<h3>爱心学校建设</h3>
+					<p>改善乡村学校教学设施，建设现代化教室和图书馆</p>
+				</div>
+				<div class="activity-item">
+					<i class="fas fa-users"></i>
+					<h3>志愿者支教</h3>
+					<p>组织技术专家定期开展支教活动，传授知识和技能</p>
+				</div>
+			</div>
+
+			<h2><i class="fas fa-images"></i> 活动剪影</h2>
+
+			<div class="gallery">
+				<div class="gallery-item">
+					<div class="image-placeholder" style="background: linear-gradient(45deg, #ff9a9e, #fad0c4);">
+						<i class="fas fa-book-reader"></i>
+					</div>
+					<div class="caption">图书捐赠仪式</div>
+				</div>
+				<div class="gallery-item">
+					<div class="image-placeholder" style="background: linear-gradient(45deg, #a1c4fd, #c2e9fb);">
+						<i class="fas fa-laptop-code"></i>
+					</div>
+					<div class="caption">科技课程教学</div>
+				</div>
+				<div class="gallery-item">
+					<div class="image-placeholder" style="background: linear-gradient(45deg, #ffecd2, #fcb69f);">
+						<i class="fas fa-graduation-cap"></i>
+					</div>
+					<div class="caption">爱心学校揭牌</div>
+				</div>
+				<div class="gallery-item">
+					<div class="image-placeholder" style="background: linear-gradient(45deg, #84fab0, #8fd3f4);">
+						<i class="fas fa-chalkboard-teacher"></i>
+					</div>
+					<div class="caption">志愿者支教活动</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="card">
+			<h2><i class="fas fa-chart-line"></i> 公益成果</h2>
+
+			<div class="stats">
+				<div class="stat-box">
+					<div class="number">50+</div>
+					<p>受益学校</p>
+				</div>
+				<div class="stat-box">
+					<div class="number">5,000+</div>
+					<p>受益儿童</p>
+				</div>
+				<div class="stat-box">
+					<div class="number">120+</div>
+					<p>志愿者</p>
+				</div>
+				<div class="stat-box">
+					<div class="number">200万+</div>
+					<p>捐赠物资(元)</p>
+				</div>
+			</div>
+
+			<h2><i class="fas fa-user-graduate"></i> 受助学生故事</h2>
+
+			<div class="testimonials">
+				<div class="testimonial">
+					<i class="fas fa-quote-left"></i>
+					<p>感谢叔叔阿姨们带来的电脑和书籍，我第一次接触编程就爱上了它。现在我每天放学后都会去学校的电脑室学习，我的梦想是成为一名软件工程师！</p>
+					<div class="author">- 李明，12岁，云南山区学生</div>
+				</div>
+			</div>
+
+			<h2><i class="fas fa-calendar-alt"></i> 近期活动计划</h2>
+
+			<ul style="list-style: none; padding: 0;">
+				<li style="padding: 15px 0; border-bottom: 1px solid #eee; display: flex; align-items: center;">
+					<i class="far fa-calendar-check" style="color: #e74c3c; margin-right: 15px; font-size: 1.5rem;"></i>
+					<div>
+						<h3 style="color: #e74c3c; margin-bottom: 5px;">科技夏令营</h3>
+						<p>2023年7月15日-7月25日 | 云南大理</p>
+					</div>
+				</li>
+				<li style="padding: 15px 0; border-bottom: 1px solid #eee; display: flex; align-items: center;">
+					<i class="far fa-calendar-check" style="color: #e74c3c; margin-right: 15px; font-size: 1.5rem;"></i>
+					<div>
+						<h3 style="color: #e74c3c; margin-bottom: 5px;">电脑教室捐赠</h3>
+						<p>2023年9月1日 | 贵州黔东南</p>
+					</div>
+				</li>
+				<li style="padding: 15px 0; display: flex; align-items: center;">
+					<i class="far fa-calendar-check" style="color: #e74c3c; margin-right: 15px; font-size: 1.5rem;"></i>
+					<div>
+						<h3 style="color: #e74c3c; margin-bottom: 5px;">志愿者招募</h3>
+						<p>长期有效 | 全国范围</p>
+					</div>
+				</li>
+			</ul>
+
+			<div style="margin-top: 30px; text-align: center; background: #fff5f0; padding: 25px; border-radius: 15px;">
+				<i class="fas fa-quote-left" style="font-size: 2.5rem; color: #e74c3c; margin-bottom: 15px;"></i>
+				<h3 style="color: #e74c3c;">"科技不仅改变产业，更能温暖人心"</h3>
+				<p>用技术的力量助力教育公平，让每个孩子都有机会接触前沿科技</p>
+			</div>
+		</div>
+	</div>
+
+	<div class="cta">
+		<h2><i class="fas fa-hands-helping"></i> 加入我们的公益行动</h2>
+		<p>无论您是企业还是个人，都可以为乡村教育事业贡献力量</p>
+		<p>参与方式：物资捐赠、资金支持、志愿者报名、专业讲师招募</p>
+		<a href="#" class="cta-button">立即参与 <i class="fas fa-arrow-right"></i></a>
+	</div>
+
+	<footer>
+		<p>©2023 软件测试行业协会 | 用科技温暖童心，助力乡村教育发展</p>
+		<span class="footer-logo">©云南故事</span>
+	</footer>
+</div>
+</body>
+</html>
