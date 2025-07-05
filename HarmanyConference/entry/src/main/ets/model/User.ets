@@ -1,4 +1,8 @@
-// src/main/ets/model/User.ets
+export interface LoginRequest{
+  username: string;
+  password: string;
+  companyName: string;
+}
 export interface UserData {
   user_id: string;
   compony: string;
