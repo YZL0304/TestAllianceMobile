@@ -2,117 +2,86 @@ import { DynamicsData } from '../../model/Dynamics';
 import Dynamics from '../../model/Dynamics';
 import { bufferToString } from '../../util/BufferUtil';
 import { DynamicState } from '../../model/DynamicState';
-import { DynamicsDetail } from '../../view/DynamicsDetail';
 import { DynamicItem } from '../../view/DynamicItem';
-import { BusinessError } from '@kit.BasicServicesKit';
-
-// 每页加载的数量
-const PAGE_SIZE = 10;
+import { http } from "@kit.NetworkKit";
 
 @Component
 export struct dynamicIndex {
-  // 消费路由栈（需父组件通过 @Provide 提供）
-  @Consume("DynamicsPageStack") private dynamicPageStack!: NavPathStack;
+  @Consume("DynamicsPageStack") private pageStack!: NavPathStack;
+  @State message: string = "动态通知";
+  @State dynamicList: Dynamics[] = [];      // 动态数据列表
+  @State filteredList: Dynamics[] = [];     // 搜索过滤后的列表
+  @State isLoading: boolean = true;         // 加载状态
+  @State errorMessage: string = '';         // 错误信息
+  @State searchKeyword: string = '';        // 搜索关键词
+  @State refreshing: boolean = false;       // 下拉刷新状态
 
-  @State dynamicList: Dynamics[] = [];   // 原始动态数据列表
-  @State filteredList: Dynamics[] = [];  // 搜索过滤后的列表
-  @State isLoading: boolean = true;      // 加载状态
-  @State errorMessage: string = '';      // 错误信息
-  @State searchKeyword: string = '';     // 搜索关键词
-  @State refreshing: boolean = false;    // 下拉刷新状态（响应式）
-  @State loadingMore: boolean = false;   // 上拉加载状态
-  @State hasMoreData: boolean = true;    // 是否还有更多数据
-  @State currentPage: number = 1;        // 当前页码
-
-  @Builder
-  PageMap(name:string) {
-    if (name === "DynamicsDetail") {
-      DynamicsDetail()
-    }
-  }
-  // 动态点击事件处理
   private handleDynamicClick = (dynamic: Dynamics) => {
     console.log("动态点击:", dynamic.title);
     DynamicState.getInstance().selectedDynamics = dynamic;
-    console.log("保存的动态:", DynamicState.getInstance().selectedDynamics);
-    // 跳转时传递动态数据到详情页
-    this.dynamicPageStack.pushPath({ name:"DynamicsDetail" });
+    this.pageStack.pushPath({ name: "DynamicsDetail" });
   };
 
   aboutToAppear(): void {
-    this.loadDynamic(true);
+    this.loadDynamics();
   }
 
-  // 加载动态数据
-  loadDynamic(isRefresh: boolean = false) {
-    if (isRefresh) {
-      this.currentPage = 1;
-      this.hasMoreData = true;
-    }
+  async loadDynamics() {
+    this.refreshing = true;
 
-    if (!isRefresh &&!this.hasMoreData) {
-      return;
-    }
+    try {
+      const httpRequest = http.createHttp();
+      const response = await httpRequest.request(
+        'http://172.22.123.162：8080/dynamics',
+        { method: http.RequestMethod.GET }
+      );
 
-    // 设置加载状态
-    if (isRefresh) {
-      this.refreshing = true;
-    } else {
-      this.loadingMore = true;
-    }
+      if (response.responseCode === 200) {
+        const rawData = response.result.toString();
+        console.log("原始响应数据:", rawData);
+        const jsonData: DynamicsData[] = JSON.parse(rawData);
 
-    getContext(this)
-      .resourceManager.getRawFileContent("dynamics.json")
-      .then((value) => {
-        const jsonData: DynamicsData[] = JSON.parse(bufferToString(value));
-        const startIndex = (this.currentPage - 1) * PAGE_SIZE;
-        const endIndex = this.currentPage * PAGE_SIZE;
-        const pageData = jsonData.slice(startIndex, endIndex);
-
-        const newDynamics = pageData.map(
+        this.dynamicList = jsonData.map(
           (item) => new Dynamics(
             item.dynamic_id, item.publisher_id, item.title, item.content,
             item.summary, item.author, item.image_url, item.create_time, item.audit_status
           )
         );
 
-        if (isRefresh) {
-          this.dynamicList = newDynamics;
-        } else {
-          this.dynamicList = [...this.dynamicList, ...newDynamics];
-        }
+        this.filteredList = this.dynamicList.filter(d => d.audit_status !== 0);
+      } else {
+        this.errorMessage = `获取数据失败: ${response.responseCode}`;
+      }
 
-        if (newDynamics.length > 0) {
-          this.currentPage++;
-        }
-
-        this.hasMoreData = endIndex < jsonData.length;
-        this.filteredList = this.dynamicList.filter(d => d.audit_status!== 0);
-
-        // 重置状态
-        this.isLoading = false;
-        this.refreshing = false;
-        this.loadingMore = false;
-      })
-      .catch((error: BusinessError) => {
-        this.errorMessage = "数据加载失败";
-        this.isLoading = false;
-        this.refreshing = false;
-        this.loadingMore = false;
-      });
+      httpRequest.destroy();
+    } catch (error) {
+      console.error('加载动态失败:', JSON.stringify(error));
+      this.errorMessage = '网络错误，无法加载动态';
+    } finally {
+      this.isLoading = false;
+      this.refreshing = false;
+    }
   }
 
-  // 搜索逻辑：实时过滤
   private onSearchChange(keyword: string) {
     this.searchKeyword = keyword;
     this.filteredList = this.dynamicList
-      .filter(d => d.audit_status!== 0)
+      .filter(d => d.audit_status !== 0)
       .filter(d => d.title.includes(keyword) || d.summary.includes(keyword));
   }
 
   build() {
-    Navigation(this.dynamicPageStack)  {
+    NavDestination() {
       Column() {
+        Text(this.message)
+          .fontSize(18)
+          .fontWeight(700)
+          .width('100%')
+          .textAlign(TextAlign.Start)
+          .padding({ left: 16 })
+          .fontFamily('HarmonyHeiTi-Bold')
+          .lineHeight(33)
+
         // 搜索栏
         Row() {
           TextInput({ placeholder: "搜索动态名称" })
@@ -122,94 +91,47 @@ export struct dynamicIndex {
             .backgroundColor('#F5F5F5')
             .borderRadius(8)
             .onChange((value: string) => this.onSearchChange(value));
-
         }
         .width('100%')
-        .padding({ top: 12, bottom: 12, left: 16, right: 16 })
-        .backgroundColor('#FFFFFF');
+        .padding({ bottom: 12, left: 16, right: 16 })
 
-        // 动态列表 + 下拉刷新（使用 Refresh 组件）
-        Refresh({ refreshing: $$this.refreshing }) {
-          List() {
-            ForEach(this.filteredList, (dynamic: Dynamics) => {
-              ListItem() {
-                DynamicItem({
-                  dynamic: dynamic,
-                  onItemClick1: this.handleDynamicClick
-                })
-              }
-            }, (dynamic: Dynamics) => dynamic.title)
-
-            // 加载更多指示器
-            if (this.loadingMore) {
-              ListItem() {
-                Row() {
-                  Text("加载中...")
-                    .fontSize(14)
-                    .fontColor('#999999')
-                }
-                .width('100%')
-                .height(48)
-                .justifyContent(FlexAlign.Center)
-              }
-            }
-
-            // 没有更多数据提示
-            if (!this.loadingMore &&!this.hasMoreData && this.filteredList.length > 0) {
-              ListItem() {
-                Row() {
-                  Text("已经到底了")
-                    .fontSize(14)
-                    .fontColor('#999999')
-                }
-                .width('100%')
-                .height(48)
-                .justifyContent(FlexAlign.Center)
-              }
-            }
-          }
-          .width('100%')
-          .layoutWeight(1)
-          .divider({ strokeWidth: 0.5, color: 0xEEEEEE })
-          .edgeEffect(EdgeEffect.Spring)
-          .backgroundColor('#F1F3F5')
-          .visibility(this.isLoading? Visibility.Hidden : Visibility.Visible)
-          .onReachEnd(() => { // 上拉加载逻辑
-            if (!this.loadingMore && this.hasMoreData) {
-              this.loadDynamic(false);
-            }
-          })
-        }
-        .onRefreshing(() => {
-          this.loadDynamic(true);
-          console.log('开始刷新数据');
-        })
-        .backgroundColor(0xF1F3F5)
-        .refreshOffset(64)
-        .pullToRefresh(true)
-
-        // 加载状态提示
-        if (this.isLoading &&!this.refreshing) {
-          Text("加载中...")
-            .fontSize(16)
-            .width('100%')
-            .textAlign(TextAlign.Center)
-            .margin({ top: 50 });
-        }
-
-        // 错误提示
-        if (this.errorMessage &&!this.refreshing &&!this.loadingMore) {
+        if (this.isLoading) {
+          LoadingProgress()
+            .width(50)
+            .height(50)
+            .margin({ top: 100 })
+        } else if (this.errorMessage) {
           Text(this.errorMessage)
             .fontSize(16)
-            .fontColor('#FF0000')
+            .fontColor(Color.Red)
+            .margin({ top: 50 })
+        } else {
+          Refresh({ refreshing: $$this.refreshing }) {
+            List() {
+              ForEach(this.filteredList, (dynamic: Dynamics) => {
+                ListItem() {
+                  DynamicItem({
+                    dynamic: dynamic,
+                    onItemClick1: this.handleDynamicClick
+                  })
+                }
+              }, (dynamic: Dynamics) => dynamic.title)
+            }
             .width('100%')
-            .textAlign(TextAlign.Center)
-            .margin({ top: 50 });
+            .layoutWeight(1)
+            .divider({ strokeWidth: 0.5, color: 0xEEEEEE })
+            .edgeEffect(EdgeEffect.Spring)
+            .backgroundColor('#F1F3F5')
+          }
+          .onRefreshing(() => {
+            this.loadDynamics();
+          })
+          .backgroundColor(0xF1F3F5)
+          .refreshOffset(64)
+          .pullToRefresh(true)
         }
       }
     }
-    .hideTitleBar(true)
-    .navDestination(this.PageMap)
+    .hideTitleBar(true);
   }
 }
-
