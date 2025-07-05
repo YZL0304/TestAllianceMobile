@@ -1,4 +1,4 @@
-import { HomePage } from './home'
+import { dynamicIndex } from './industryDynamics/dynamicIndex'
 import { ConferencePage } from './cooperate/conferenceIndex'
 import { cooperateIndex } from './cooperate/CooperateIndex'
 import { User } from '../model/User';
@@ -9,6 +9,7 @@ import { User } from '../model/User';
 struct MasterPage {
   @StorageLink('currentUser') currentUser: User | null = null;
   @Provide('ConferencePageStack') conferencePageStack: NavPathStack = new NavPathStack();
+  @Provide('DynamicsPageStack') dynamicsPageStack: NavPathStack = new NavPathStack();
   @State currentIndex: number = 0
   private tabsController: TabsController = new TabsController()
 
@@ -41,9 +42,9 @@ struct MasterPage {
 
       Tabs({ barPosition: BarPosition.End, controller: this.tabsController }) {
         TabContent() {
-          HomePage()
+          dynamicIndex()
         }
-        .tabBar(this.tabBarBuilder('首页', 0, $r('app.media.ic_01_on'), $r('app.media.ic_01_off')))
+        .tabBar(this.tabBarBuilder('动态', 0, $r('app.media.ic_01_on'), $r('app.media.ic_01_off')))
 
         TabContent() {
           cooperateIndex()
@@ -78,7 +79,7 @@ struct MasterPage {
   }
 
   getTitle(): string {
-    const titles = ['课表', '合作']
+    const titles = ['动态', '合作']
     return titles[this.currentIndex]
   }
 }

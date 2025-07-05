@@ -30,7 +30,7 @@ export struct DynamicsDetail {
           Column({ space: 10 }) {
             if (this.dynamic) {
               // 封面图
-              NetworkImage({ url: this.dynamic.image_url })
+              NetworkImage({ url: this.dynamic.imageUrl })
                 .width("100%")
                 .height(200)
                 .borderRadius(12)

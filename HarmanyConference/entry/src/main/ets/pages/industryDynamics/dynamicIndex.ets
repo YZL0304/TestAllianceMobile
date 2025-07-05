@@ -43,12 +43,12 @@ export struct dynamicIndex {
 
         this.dynamicList = jsonData.map(
           (item) => new Dynamics(
-            item.dynamic_id, item.publisher_id, item.title, item.content,
-            item.summary, item.author, item.image_url, item.create_time, item.audit_status
+            item.dynamicId, item.publisherId, item.title, item.content,
+            item.summary, item.author, item.imageUrl, item.createTime, item.auditStatus
           )
         );
 
-        this.filteredList = this.dynamicList.filter(d => d.audit_status !== 0);
+        this.filteredList = this.dynamicList.filter(d => d.auditStatus !== 0);
       } else {
         this.errorMessage = `获取数据失败: ${response.responseCode}`;
       }
@@ -66,7 +66,7 @@ export struct dynamicIndex {
   private onSearchChange(keyword: string) {
     this.searchKeyword = keyword;
     this.filteredList = this.dynamicList
-      .filter(d => d.audit_status !== 0)
+      .filter(d => d.auditStatus !== 0)
       .filter(d => d.title.includes(keyword) || d.summary.includes(keyword));
   }
 

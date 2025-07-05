@@ -1,46 +1,46 @@
 export interface DynamicsData {
-  dynamic_id: number;//动态号
-  publisher_id: number;//发布者编号
+  dynamicId: number;//动态号
+  publisherId: number;//发布者编号
   title: string;//题目
   content: string;//动态内容
   summary: string;//简介
   author: string;//作者
-  image_url: string;//动态相关图片
-  create_time: string;//创建时间
-  audit_status:number;//审核状态
+  imageUrl: string;//动态相关图片
+  createTime: string;//创建时间
+  auditStatus:number;//审核状态
 }
 
 export default class Dynamics {
-  dynamic_id: number = 0;//动态号
-  publisher_id: number = 0;//发布者编号
+  dynamicId: number = 0;//动态号
+  publisherId: number = 0;//发布者编号
   title: string = "";//题目
   content: string = "";//动态内容
   summary: string = "";//简介
   author: string = "";//作者
-  image_url: string = "";//动态相关图片
-  create_time: string = "";//创建时间
-  audit_status:number = 0;
+  imageUrl: string = "";//动态相关图片
+  createTime: string = "";//创建时间
+  auditStatus:number = 0;
 
   constructor(
-    dynamic_id: number,
-    publisher_id: number,
+    dynamicId: number,
+    publisherId: number,
     title: string,
     content: string,
     summary: string,
     author: string,
-    image_url: string,
-    create_time: string,
-    audit_status:number
+    imageUrl: string,
+    createTime: string,
+    auditStatus:number
   ){
-    this.dynamic_id = dynamic_id;
-    this.publisher_id = publisher_id;
+    this.dynamicId = dynamicId;
+    this.publisherId = publisherId;
     this.title = title;
     this.content = content;
     this.summary = summary;
     this.author = author;
-    this.image_url = image_url;
-    this.create_time = create_time;
-    this.audit_status = audit_status;
+    this.imageUrl = imageUrl;
+    this.createTime = createTime;
+    this.auditStatus = auditStatus;
   }
 
   // 时间格式化方法
@@ -49,13 +49,13 @@ export default class Dynamics {
     return timePart.substring(0, 5);
   }
   get formattedStartTime(): string {
-    return this.formatTime(this.create_time);
+    return this.formatTime(this.createTime);
   }
   get date(): string {
-    return this.create_time.split(" ")[0];
+    return this.createTime.split(" ")[0];
   }
   get datePart(): string {
-    return this.create_time.split(" ")[0] || "";
+    return this.createTime.split(" ")[0] || "";
   }
 }
 
