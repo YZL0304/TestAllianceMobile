@@ -21,8 +21,6 @@ export struct dynamicIndex {
   @State searchKeyword: string = '';     // 搜索关键词
   @State refreshing: boolean = false;    // 下拉刷新状态（响应式）
   @State loadingMore: boolean = false;   // 上拉加载状态
-  @State hasMoreData: boolean = true;    // 是否还有更多数据
-  @State currentPage: number = 1;        // 当前页码
 
   @Builder
   PageMap(name:string) {
