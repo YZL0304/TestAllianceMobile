@@ -60,12 +60,6 @@ export struct DynamicsDetail {
               Text(this.dynamic.content)
                 .fontSize(15)
                 .lineHeight(22);
-              //
-              // // 创建时间
-              // Text(`发布时间：${this.dynamic.create_time}`)
-              //   .fontSize(14)
-              //   .fontColor(Color.Gray)
-              //   .margin({ top: 12 });
             } else {
               // 加载状态
               Column() {

@@ -2,6 +2,7 @@ import { dynamicIndex } from './industryDynamics/dynamicIndex'
 import { ConferencePage } from './cooperate/conferenceIndex'
 import { cooperateIndex } from './cooperate/CooperateIndex'
 import { User } from '../model/User';
+import { DynamicMap } from './industryDynamics/DynamicMap';
 
 
 @Entry
@@ -42,7 +43,7 @@ struct MasterPage {
 
       Tabs({ barPosition: BarPosition.End, controller: this.tabsController }) {
         TabContent() {
-          dynamicIndex()
+          DynamicMap()
         }
         .tabBar(this.tabBarBuilder('动态', 0, $r('app.media.ic_01_on'), $r('app.media.ic_01_off')))
 

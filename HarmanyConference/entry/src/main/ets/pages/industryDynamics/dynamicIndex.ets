@@ -73,28 +73,38 @@ export struct dynamicIndex {
   build() {
     NavDestination() {
       Column() {
-        Text(this.message)
-          .fontSize(18)
-          .fontWeight(700)
-          .width('100%')
-          .textAlign(TextAlign.Start)
-          .padding({ left: 16 })
-          .fontFamily('HarmonyHeiTi-Bold')
-          .lineHeight(33)
+        // 顶部区域
+        Column() {
+          // 主标题区域
+          Row() {
+            Text('动态通知')
+              .fontSize(18)
+              .fontWeight(FontWeight.Bold)
+              .fontColor('#000000')
 
-        // 搜索栏
-        Row() {
-          TextInput({ placeholder: "搜索动态名称" })
-            .fontSize(14)
-            .width('100%')
-            .padding({ left: 12, right: 12 })
-            .backgroundColor('#F5F5F5')
-            .borderRadius(8)
-            .onChange((value: string) => this.onSearchChange(value));
+            Blank()
+          }
+          .width('100%')
+          .padding({ bottom: 8 })
+
+          // 搜索区域
+          Row() {
+            TextInput({ placeholder: "搜索动态名称" })
+              .fontSize(14)
+              .width('100%')
+              .padding({ left: 12, right: 12, top: 8, bottom: 8 })
+              .backgroundColor('#F5F5F5')
+              .borderRadius(8)
+              .onChange((value: string) => this.onSearchChange(value));
+          }
+          .width('100%')
         }
         .width('100%')
-        .padding({ bottom: 12, left: 16, right: 16 })
+        .padding({ top: 12, bottom: 12, left: 16, right: 16 })
+        .backgroundColor('#ffffff')
+        .borderRadius(12)
 
+        // 内容区域
         if (this.isLoading) {
           LoadingProgress()
             .width(50)
@@ -131,7 +141,10 @@ export struct dynamicIndex {
           .pullToRefresh(true)
         }
       }
+      .backgroundColor('#F1F3F5')
+      .width('100%')
+      .height('100%')
     }
-    .hideTitleBar(true);
+    .hideTitleBar(true)
   }
 }
