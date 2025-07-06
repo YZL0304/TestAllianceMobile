@@ -98,7 +98,7 @@ export struct RegisterView {
 
       // 发送请求
       const response = await httpRequest.request(
-        "http://172.22.123.162:8080/feedbackMobile",
+        "http://192.168.37.143:8080/feedbackMobile",
         {
           method: http.RequestMethod.POST,
           header: { 'Content-Type': 'application/json' },

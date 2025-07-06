@@ -1,15 +1,60 @@
 import { DynamicState } from "../model/DynamicState";
 import Dynamics from "../model/Dynamics";
+import { http } from "@kit.NetworkKit";
 import { NetworkImage } from "../util/NetworkImage";
 
 @Entry
 @Component
 export struct DynamicsDetail {
   @State dynamic: Dynamics | null = null;
+  private dynamicState = DynamicState.getInstance();
+
+  async recordVisit() {
+    if (!this.dynamic || !this.dynamic.dynamicId) {
+      console.error("动态数据无效，缺少dynamic_id");
+      return;
+    }
+
+    const user_id = this.dynamicState.getCurrentUserId();
+    if (!user_id) {
+      console.log("用户未登录，不记录浏览");
+      return;
+    }
+
+    try {
+      const httpRequest = http.createHttp();
+      const response = await httpRequest.request(
+        'http://192.168.37.143:8080/recordVisit',
+        {
+          method: http.RequestMethod.POST,
+          header: {
+            'Content-Type': 'application/json'
+          },
+          extraData: JSON.stringify({
+            user_id: user_id,
+            dynamic_id: this.dynamic.dynamicId,
+            visitTime: new Date().toISOString() // 添加当前时间
+          })
+        }
+      );
+
+      if (response.responseCode === 200) {
+        console.log("访问记录成功");
+      } else {
+        console.error("记录访问失败:", response.responseCode);
+      }
+
+      httpRequest.destroy();
+    } catch (error) {
+      console.error('记录访问失败:', JSON.stringify(error));
+    }
+  }
+
 
   aboutToAppear() {
     this.dynamic = DynamicState.getInstance().selectedDynamics;
     console.log("加载的动态:", this.dynamic);
+    this.recordVisit();
   }
 
   build() {

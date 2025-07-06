@@ -3,6 +3,7 @@ import { ConferencePage } from './cooperate/conferenceIndex'
 import { cooperateIndex } from './cooperate/CooperateIndex'
 import { User } from '../model/User';
 import { DynamicMap } from './industryDynamics/DynamicMap';
+import { DynamicState } from '../model/DynamicState';
 
 
 @Entry
@@ -36,7 +37,10 @@ struct MasterPage {
       this.tabsController.changeIndex(targetIndex)
     })
   }
-
+  aboutToAppear() {
+    // 初始化时设置用户
+    DynamicState.getInstance().setCurrentUser(this.currentUser);
+  }
   build() {
     Column() {
       this.renderHeader()

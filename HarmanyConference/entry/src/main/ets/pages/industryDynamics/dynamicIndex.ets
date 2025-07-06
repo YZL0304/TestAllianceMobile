@@ -17,6 +17,10 @@ export struct dynamicIndex {
   @State refreshing: boolean = false;       // 下拉刷新状态
 
   private handleDynamicClick = (dynamic: Dynamics) => {
+    if (!dynamic || !dynamic.dynamicId) {
+      console.error("无效的动态数据", dynamic);
+      return;
+    }
     console.log("动态点击:", dynamic.title);
     DynamicState.getInstance().selectedDynamics = dynamic;
     this.pageStack.pushPath({ name: "DynamicsDetail" });
