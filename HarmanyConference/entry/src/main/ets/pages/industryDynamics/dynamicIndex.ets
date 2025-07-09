@@ -1,6 +1,7 @@
 import { DynamicsData } from '../../model/Dynamics';
 import Dynamics from '../../model/Dynamics';
 import { bufferToString } from '../../util/BufferUtil';
+
 import { DynamicState } from '../../model/DynamicState';
 import { DynamicItem } from '../../view/DynamicItem';
 import { http } from "@kit.NetworkKit";
@@ -71,6 +72,7 @@ export struct dynamicIndex {
     this.searchKeyword = keyword;
     this.filteredList = this.dynamicList
       .filter(d => d.auditStatus !== 0)
+
       .filter(d => d.title.includes(keyword) || d.summary.includes(keyword));
   }
 
@@ -152,3 +154,4 @@ export struct dynamicIndex {
     .hideTitleBar(true)
   }
 }
+

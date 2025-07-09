@@ -7,6 +7,7 @@ import { NetworkImage } from "../util/NetworkImage";
 @Component
 export struct DynamicsDetail {
   @State dynamic: Dynamics | null = null;
+
   private dynamicState = DynamicState.getInstance();
 
   async recordVisit() {
@@ -55,6 +56,7 @@ export struct DynamicsDetail {
     this.dynamic = DynamicState.getInstance().selectedDynamics;
     console.log("加载的动态:", this.dynamic);
     this.recordVisit();
+
   }
 
   build() {
@@ -75,7 +77,9 @@ export struct DynamicsDetail {
           Column({ space: 10 }) {
             if (this.dynamic) {
               // 封面图
+
               NetworkImage({ url: this.dynamic.imageUrl })
+
                 .width("100%")
                 .height(200)
                 .borderRadius(12)
@@ -105,6 +109,7 @@ export struct DynamicsDetail {
               Text(this.dynamic.content)
                 .fontSize(15)
                 .lineHeight(22);
+
             } else {
               // 加载状态
               Column() {

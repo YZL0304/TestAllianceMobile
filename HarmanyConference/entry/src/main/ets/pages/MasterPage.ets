@@ -1,9 +1,11 @@
+
 import { dynamicIndex } from './industryDynamics/dynamicIndex'
 import { ConferencePage } from './cooperate/conferenceIndex'
 import { cooperateIndex } from './cooperate/CooperateIndex'
 import { User } from '../model/User';
 import { DynamicMap } from './industryDynamics/DynamicMap';
 import { DynamicState } from '../model/DynamicState';
+
 
 
 @Entry
@@ -37,17 +39,21 @@ struct MasterPage {
       this.tabsController.changeIndex(targetIndex)
     })
   }
+
   aboutToAppear() {
     // 初始化时设置用户
     DynamicState.getInstance().setCurrentUser(this.currentUser);
   }
+
   build() {
     Column() {
       this.renderHeader()
 
       Tabs({ barPosition: BarPosition.End, controller: this.tabsController }) {
         TabContent() {
+
           DynamicMap()
+
         }
         .tabBar(this.tabBarBuilder('动态', 0, $r('app.media.ic_01_on'), $r('app.media.ic_01_off')))
 
@@ -84,7 +90,9 @@ struct MasterPage {
   }
 
   getTitle(): string {
+
     const titles = ['动态', '合作']
+
     return titles[this.currentIndex]
   }
 }

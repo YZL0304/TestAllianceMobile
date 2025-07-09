@@ -1,10 +1,14 @@
+
 import { LoginRequest, User, UserData } from '../model/User';
+
 
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
 import common from '@ohos.app.ability.common';
 import { bufferToString } from '../util/BufferUtil';
+
 import { http } from '@kit.NetworkKit';
+
 
 
 @Entry
@@ -17,6 +21,7 @@ struct Index {
   @State isLoading: boolean = false;
   @State errorMessage: string = '';
   @State showPassword: boolean = false;
+
 
 
   // 处理登录逻辑
@@ -64,6 +69,7 @@ struct Index {
     } catch (error) {
       console.error('Login error:', JSON.stringify(error));
       this.errorMessage = '网络错误，无法登录';
+
     } finally {
       this.isLoading = false;
     }

@@ -2,7 +2,9 @@ import { AppState } from "../../model/AppState";
 import Course, { CourseData } from "../../model/Course";
 import { bufferToString } from "../../util/BufferUtil";
 import { ConferenceItem } from "../../view/ConferenceItem";
+
 import { http } from "@kit.NetworkKit";
+
 
 
 @Component
@@ -12,6 +14,7 @@ export struct ConferencePage {
   @State courses: Course[] = [];
   @State isLoading: boolean = true;
   @State errorMessage: string = '';
+
 
   private handleCourseClick = (course: Course) => {
     console.log("会议点击:", course.name);
@@ -24,6 +27,7 @@ export struct ConferencePage {
   aboutToAppear(): void {
     this.loadCourses();
   }
+
 
   async loadCourses() {
     try {
@@ -66,6 +70,7 @@ export struct ConferencePage {
     } finally {
       this.isLoading = false;
     }
+
   }
 
   build() {
@@ -107,6 +112,7 @@ export struct ConferencePage {
           .edgeEffect(EdgeEffect.Spring)
           .backgroundColor('#F1F3F5')
         }
+
       }
     }
     .hideTitleBar(true);
