@@ -32,6 +32,7 @@ export struct ConferenceDetail {
             if (this.course) {
               // 封面图
               NetworkImage({ url: this.course.coverUrl })
+
                 .width("100%")
                 .height(200)
                 .borderRadius(12)
@@ -48,7 +49,9 @@ export struct ConferenceDetail {
                 .fontColor(Color.Gray);
 
               // 创建者和会议类别
+
               Text(`创建者：${this.course.creatorName}`)
+
                 .fontSize(16)
                 .fontColor(Color.Gray);
 
@@ -57,6 +60,7 @@ export struct ConferenceDetail {
                 .fontColor(Color.Gray);
 
               // 会议时间和地点
+
               Text(`时间：${this.course.duration} `)
                 .fontSize(16)
                 .fontColor(Color.Gray);
@@ -96,12 +100,14 @@ export struct ConferenceDetail {
                 .lineHeight(22);
 
               // 创建时间
+
               Text(`创建时间：${this.course.createTime}`)
+
                 .fontSize(14)
                 .fontColor(Color.Gray)
                 .margin({ top: 12 });
 
-              // 参与状态按钮
+
                 Button("立即参加")
                   .type(ButtonType.Capsule)
                   .fontSize(16)
@@ -113,6 +119,8 @@ export struct ConferenceDetail {
                     // 参加会议的逻辑，跳到报名列
                     this.pageStack.pushPath({name:"RegisterView"})
                   });
+
+
 
             } else {
               // 加载状态

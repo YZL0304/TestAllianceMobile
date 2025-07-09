@@ -1,5 +1,6 @@
 
 export interface CourseData {
+
   id: string; //会议id meeting
   name: string; //会议名称meeting
   creatorName: string; //创建者名称meeting
@@ -13,6 +14,7 @@ export interface CourseData {
   endTime: string;//meeting
   coverUrl: string; //会议封面meeting
   createTime: string; //会议创建时间meeting
+
 }
 
 export default class Course {
@@ -21,12 +23,15 @@ export default class Course {
   location: string = "";
   startTime: string = "";
   endTime: string = "";
+
   creatorName: string = ""; //创建者名称
+
   sponsor: string = ""; //主办单位
   agenda: string = ""; //议程
   guests: string = ""; //嘉宾介绍
   content: string = ""; //会议内容
   category: string = ""; //会议类别
+
   coverUrl: string = ""; //会议封面
   createTime: string = ""; //会议创建时间
 
@@ -48,6 +53,7 @@ export default class Course {
     } else {
       return datetime.substring(0, 16);
     }
+
   }
 
   constructor(
@@ -70,7 +76,9 @@ export default class Course {
     this.location = location;
     this.startTime = startTime;
     this.endTime = endTime;
+
     this.creatorName = creator_name;
+
     this.sponsor = sponsor;
     this.agenda = agenda;
     this.guests = guests;
@@ -78,5 +86,6 @@ export default class Course {
     this.category = category;
     this.coverUrl = cover_url;
     this.createTime = create_time;
+
   }
 }

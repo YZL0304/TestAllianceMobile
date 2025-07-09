@@ -1,10 +1,10 @@
-import Course from "../model/Course";
+import Dynamics from "../model/Dynamics";
 import { NetworkImage } from "../util/NetworkImage";
 
 @Component
-export struct ConferenceItem {
-  @Prop course: Course;
-  private onItemClick: (course: Course) => void = () => {};
+export struct DynamicItem {
+  @Prop dynamic: Dynamics;
+  private  onItemClick1: (dynamic: Dynamics) => void = () => {};
   @State imageLoadFailed: boolean = false;
 
   build() {
@@ -12,7 +12,7 @@ export struct ConferenceItem {
       // 左侧文本区域 (占70%宽度)
       Column() {
         // 会议标题 - 粗体大字号
-        Text(this.course.name)
+        Text(this.dynamic.title)
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
           .fontColor("#000000")
@@ -21,7 +21,7 @@ export struct ConferenceItem {
           .textAlign(TextAlign.Start)
 
         // 会议简介 - 中等字号灰色
-        Text(this.course.content)
+        Text(this.dynamic.content)
           .fontSize(14)
           .fontColor("#666666")
           .textOverflow({ overflow: TextOverflow.Ellipsis })
@@ -33,7 +33,7 @@ export struct ConferenceItem {
         // 使用Flex布局将主办单位推到底部
         Flex({ justifyContent: FlexAlign.End, alignItems: ItemAlign.End }) {
           // 主办单位 - 小字号浅灰色
-          Text(this.course.sponsor)
+          Text(this.dynamic.author)
             .fontSize(12)
             .fontColor("#888888")
             .textOverflow({ overflow: TextOverflow.Ellipsis })
@@ -62,9 +62,7 @@ export struct ConferenceItem {
             .backgroundColor('#F0F0F0')
             .borderRadius(8)
         } else {
-
-          NetworkImage({ url: this.course.coverUrl })
-
+          NetworkImage({ url: this.dynamic.image_url })
             .width(100)
             .height(100)
             .borderRadius(8)
@@ -81,7 +79,9 @@ export struct ConferenceItem {
     .margin({ top: 8, bottom: 8 })
     .padding({ top: 8, bottom: 8 })
     .onClick(() => {
-      this.onItemClick(this.course);
+      console.log("点击动态：",this.dynamic.title)
+      this.onItemClick1(this.dynamic);
     })
+
   }
 }

@@ -3,8 +3,10 @@ import Course from "../model/Course";
 import { User } from "../model/User";
 import { faceDetector } from "@kit.CoreVisionKit";
 import { promptAction } from "@kit.ArkUI";
+
 import { http } from "@kit.NetworkKit";
 import { FeedbackData } from "../model/FeedBack";
+
 
 
 //报名表页
@@ -23,8 +25,10 @@ export struct RegisterView {
   @State arrive_time: string = '';
   @State create_time: string = new Date().toISOString(); //自动获取当前时间
   @State isSaving: boolean = false;
+
   @State selectedDate: Date = new Date()
   @State selectedTime: Date = new Date()
+
 
   aboutToAppear() {
     if (this.currentUser) {
@@ -38,6 +42,7 @@ export struct RegisterView {
 
   }
 
+
   formatDateTime(date: Date): string {
     const pad = (n: number) => n < 10 ? '0' + n : n;
     return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ` +
@@ -48,6 +53,7 @@ export struct RegisterView {
     return `${datePart.getFullYear()}-${pad(datePart.getMonth() + 1)}-${pad(datePart.getDate())} ` +
       `${pad(timePart.getHours())}:${pad(timePart.getMinutes())}:00`;
   }
+
 
   //检查是否全部填写
   validateForm(): boolean {
@@ -60,6 +66,7 @@ export struct RegisterView {
       this.arrive_train.trim() !== '' &&
       this.arrive_time.trim() !== '';
   }
+
 
   async submitFormData(): Promise<void> {
     // 确保会议ID存在
@@ -98,7 +105,7 @@ export struct RegisterView {
 
       // 发送请求
       const response = await httpRequest.request(
-        "http://172.22.123.162:8080/feedbackMobile",
+        "http://192.168.37.143:8080/feedbackMobile",
         {
           method: http.RequestMethod.POST,
           header: { 'Content-Type': 'application/json' },
@@ -147,6 +154,7 @@ export struct RegisterView {
 
   build() {
     NavDestination() {
+
       Column() {
         // 头部 - 会议名称
         Text(this.course?.name || '会议报名')
@@ -291,6 +299,7 @@ export struct RegisterView {
               .textAlign(TextAlign.Start)
 
             TextInput({ text: this.arrive_train, placeholder: '请输入车次' })
+
               .placeholderFont({ size: 16 })
               .type(InputType.Normal)
               .height(50)
@@ -317,6 +326,7 @@ export struct RegisterView {
               end: new Date('2000-01-01T23:59:59'),
               format: TimePickerFormat.HOUR_MINUTE_SECOND
             }).width('90%').margin({ bottom: 20 })
+
           }
           .width('100%')
           .alignItems(HorizontalAlign.Center)
@@ -336,10 +346,12 @@ export struct RegisterView {
           .fontSize(18)
           .margin({ bottom: 30 })
           .backgroundColor('#0A59F7')
+
           .onClick(() => {
             this.arrive_time = this.formatArrDateTime(this.selectedDate, this.selectedTime)
             this.onSubmit()
           })
+
           .enabled(!this.isSaving)
 
       }
