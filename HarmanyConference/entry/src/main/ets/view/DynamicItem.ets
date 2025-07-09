@@ -62,7 +62,7 @@ export struct DynamicItem {
             .backgroundColor('#F0F0F0')
             .borderRadius(8)
         } else {
-          NetworkImage({ url: this.dynamic.image_url })
+          NetworkImage({ url: this.dynamic.imageUrl })
             .width(100)
             .height(100)
             .borderRadius(8)

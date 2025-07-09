@@ -37,7 +37,7 @@ export struct dynamicIndex {
     try {
       const httpRequest = http.createHttp();
       const response = await httpRequest.request(
-        'http://172.22.123.162：8080/dynamics',
+        'http://172.22.123.162:8080/dynamics',
         { method: http.RequestMethod.GET }
       );
 

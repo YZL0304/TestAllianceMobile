@@ -25,7 +25,7 @@ export struct DynamicsDetail {
     try {
       const httpRequest = http.createHttp();
       const response = await httpRequest.request(
-        'http://192.168.37.143:8080/recordVisit',
+        'http://172.22.123.162:8080/recordVisit',
         {
           method: http.RequestMethod.POST,
           header: {
