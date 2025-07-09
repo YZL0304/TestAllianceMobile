@@ -1,5 +1,6 @@
-import { AppState } from "../model/AppState";
+import { DynamicState } from "../model/DynamicState";
 import Dynamics from "../model/Dynamics";
+import { http } from "@kit.NetworkKit";
 import { NetworkImage } from "../util/NetworkImage";
 
 @Entry
@@ -7,9 +8,55 @@ import { NetworkImage } from "../util/NetworkImage";
 export struct DynamicsDetail {
   @State dynamic: Dynamics | null = null;
 
+  private dynamicState = DynamicState.getInstance();
+
+  async recordVisit() {
+    if (!this.dynamic || !this.dynamic.dynamicId) {
+      console.error("动态数据无效，缺少dynamic_id");
+      return;
+    }
+
+    const user_id = this.dynamicState.getCurrentUserId();
+    if (!user_id) {
+      console.log("用户未登录，不记录浏览");
+      return;
+    }
+
+    try {
+      const httpRequest = http.createHttp();
+      const response = await httpRequest.request(
+        'http://192.168.37.143:8080/recordVisit',
+        {
+          method: http.RequestMethod.POST,
+          header: {
+            'Content-Type': 'application/json'
+          },
+          extraData: JSON.stringify({
+            user_id: user_id,
+            dynamic_id: this.dynamic.dynamicId,
+            visitTime: new Date().toISOString() // 添加当前时间
+          })
+        }
+      );
+
+      if (response.responseCode === 200) {
+        console.log("访问记录成功");
+      } else {
+        console.error("记录访问失败:", response.responseCode);
+      }
+
+      httpRequest.destroy();
+    } catch (error) {
+      console.error('记录访问失败:', JSON.stringify(error));
+    }
+  }
+
+
   aboutToAppear() {
-    this.dynamic = AppState.getInstance().selectedDynamics;
+    this.dynamic = DynamicState.getInstance().selectedDynamics;
     console.log("加载的动态:", this.dynamic);
+    this.recordVisit();
+
   }
 
   build() {
@@ -30,7 +77,9 @@ export struct DynamicsDetail {
           Column({ space: 10 }) {
             if (this.dynamic) {
               // 封面图
-              NetworkImage({ url: this.dynamic.image_url })
+
+              NetworkImage({ url: this.dynamic.imageUrl })
+
                 .width("100%")
                 .height(200)
                 .borderRadius(12)
@@ -60,12 +109,7 @@ export struct DynamicsDetail {
               Text(this.dynamic.content)
                 .fontSize(15)
                 .lineHeight(22);
-              //
-              // // 创建时间
-              // Text(`发布时间：${this.dynamic.create_time}`)
-              //   .fontSize(14)
-              //   .fontColor(Color.Gray)
-              //   .margin({ top: 12 });
+
             } else {
               // 加载状态
               Column() {

@@ -1,19 +1,20 @@
 
 export interface CourseData {
-  id: string; //会议id
-  name: string; //会议名称
-  creator_name: string; //创建者名称
-  sponsor: string; //主办单位
-  agenda: string; //议程
-  guests: string; //嘉宾介绍
-  location: string; //会议地点
-  content: string; //会议内容
-  category: string; //会议类别
-  startTime: string; //会议时间
-  endTime: string;
-  cover_url: string; //会议封面
-  create_time: string; //会议创建时间
-  status: string[]; //有哪些用户参加会议，0是没人参加，存的是参加会议的用户的userid
+
+  id: string; //会议id meeting
+  name: string; //会议名称meeting
+  creatorName: string; //创建者名称meeting
+  sponsor: string; //主办单位meeting_detail
+  agenda: string; //议程meeting_detail
+  guests: string; //嘉宾介绍meeting_detail
+  location: string; //会议地点meeting_detail
+  content: string; //会议内容meeting
+  category: string; //会议类别meeting_category
+  startTime: string; //会议时间meeting
+  endTime: string;//meeting
+  coverUrl: string; //会议封面meeting
+  createTime: string; //会议创建时间meeting
+
 }
 
 export default class Course {
@@ -22,40 +23,37 @@ export default class Course {
   location: string = "";
   startTime: string = "";
   endTime: string = "";
-  creator_name: string = ""; //创建者名称
+
+  creatorName: string = ""; //创建者名称
+
   sponsor: string = ""; //主办单位
   agenda: string = ""; //议程
   guests: string = ""; //嘉宾介绍
   content: string = ""; //会议内容
   category: string = ""; //会议类别
-  cover_url: string = ""; //会议封面
-  create_time: string = ""; //会议创建时间
-  status: string[] = [];
 
-  // 格式化开始时间 (HH:mm)
-  get formattedStartTime(): string {
-    return this.formatTime(this.startTime);
-  }
+  coverUrl: string = ""; //会议封面
+  createTime: string = ""; //会议创建时间
 
-  // 格式化结束时间 (HH:mm)
-  get formattedEndTime(): string {
-    return this.formatTime(this.endTime);
-  }
-
-  // 时间格式化方法
-  private formatTime(timeString: string): string {
-    const timePart = timeString.split(" ")[1];
-    return timePart.substring(0, 5);
-  }
-
-  //获取日期
-  get date(): string {
-    return this.startTime.split(" ")[0];
-  }
-
-  // 持续时间
+  // 完整的持续时间字符串 (格式: "2025-06-28 19:37 - 2025-06-28 21:30")
   get duration(): string {
-    return `${this.formattedStartTime} - ${this.formattedEndTime}`;
+    return `${this.formatDateTime(this.startTime)} - ${this.formatDateTime(this.endTime)}`;
+  }
+
+  get date(): string {
+    return this.startTime.split(' ')[0] || "";
+  }
+
+  // 格式化日期时间 (移除秒部分)
+  private formatDateTime(datetime: string): string {
+    if (!datetime) return "";
+
+    if (datetime.includes('T')) {
+      return datetime.replace('T', ' ').substring(0, 16);
+    } else {
+      return datetime.substring(0, 16);
+    }
+
   }
 
   constructor(
@@ -72,21 +70,22 @@ export default class Course {
     agenda: string,
     guests: string,
     create_time: string,
-    status: string[]
   ) {
     this.id = id;
     this.name = name;
     this.location = location;
     this.startTime = startTime;
     this.endTime = endTime;
-    this.creator_name = creator_name;
+
+    this.creatorName = creator_name;
+
     this.sponsor = sponsor;
     this.agenda = agenda;
     this.guests = guests;
     this.content = content;
     this.category = category;
-    this.cover_url = cover_url;
-    this.create_time = create_time;
-    this.status = status;
+    this.coverUrl = cover_url;
+    this.createTime = create_time;
+
   }
 }
